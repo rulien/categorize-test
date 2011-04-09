@@ -1,0 +1,9 @@
+What is this ?
+
+This project is about categorizing your junit 4.7> based tests in a good manner. The reason i say 4.7> is that from that time there was added @Rule
+which is a brilliant feature to take control of a test without specifying a Runner. A Runner always gives you a certain way run a test and often with 
+some additional setup. You don't wanna be forced to do that :-)
+
+Programmer guid to categorize-test :
+
+TODO fill inn the blanks
