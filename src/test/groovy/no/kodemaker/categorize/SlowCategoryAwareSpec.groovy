@@ -12,18 +12,14 @@ class SlowCategoryAwareSpec extends Specification{
 
     Categorizable categorizable = new Categorizable()
 
-    def "should return same statement as input when slow env not variable set"(){
-        when :
-            def statement = categorizable.apply(null,null,null)
-        then :
-            statement == null
-    }
 
     def "should throw illegalstate if frameworkmethod is null"(){
         given :
             System.setProperty("category","slow")
-        expect :
-            IllegalArgumentException  == categorizable.apply(null,null,null)
+        when :
+            categorizable.apply(null,null,null)
+        then :
+            thrown(IllegalStateException)
 
 
     }

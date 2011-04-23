@@ -12,6 +12,7 @@ public class Categorizable implements MethodRule{
 
 
     public Statement apply(Statement statement, FrameworkMethod frameworkMethod, Object o) {
+        validateInput(statement,frameworkMethod,o);
         String runCategory = System.getProperty("category");
         if(StringUtils.isBlank(runCategory)) return statement;
         Category cat = frameworkMethod.getAnnotation(Category.class);
@@ -21,5 +22,9 @@ public class Categorizable implements MethodRule{
         }else{
             return statement;
         }
+    }
+
+    private void validateInput(Statement statement, FrameworkMethod frameworkMethod, Object o) {
+        if(frameworkMethod == null) throw new IllegalStateException("Input to a Rule cannot be null, something wrong in Junit ??");
     }
 }
