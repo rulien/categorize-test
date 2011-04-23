@@ -78,4 +78,24 @@ class SlowCategoryAwareSpec extends Specification{
         then :
             statement == returnStatement
     }
+
+    @Category(name = "fast", timeout = 20)
+    def "should use same timout on return statement as on category annotation"(){
+        given :
+            System.setProperty("category","fast")
+            Method methodCall = this.getClass().getMethod("should use same timout on return statement as on category annotation")
+            FrameworkMethod method = new FrameworkMethod(methodCall)
+            Statement statement = new InvokeMethod(method,this)
+        when :
+            def returnStatement = categorizable.apply(statement,method,null)
+        then :
+            returnStatement != null
+            returnStatement instanceof FailOnTimeout
+            20 == getTimeout(returnStatement)
+
+    }
+
+    int getTimeout(FailOnTimeout failOnTimeout) {
+        return failOnTimeout.metaPropertyValues.get(0).bean.fTimeout
+    }
 }

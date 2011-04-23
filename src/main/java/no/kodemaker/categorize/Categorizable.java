@@ -17,7 +17,7 @@ public class Categorizable implements MethodRule{
         Category cat = frameworkMethod.getAnnotation(Category.class);
         if(cat == null) return statement;
         if(StringUtils.isNotBlank(runCategory) && StringUtils.equals(cat.name(),runCategory)){
-            return new FailOnTimeout(statement,100);
+            return new FailOnTimeout(statement,cat.timeout());
         }else{
             return statement;
         }
