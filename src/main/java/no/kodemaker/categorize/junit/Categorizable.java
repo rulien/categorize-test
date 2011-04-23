@@ -1,7 +1,8 @@
-package no.kodemaker.categorize;
+package no.kodemaker.categorize.junit;
 
 
 import junit.framework.TestResult;
+import no.kodemaker.categorize.Category;
 import org.apache.commons.lang.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.statements.FailOnTimeout;

@@ -1,30 +1,33 @@
-package no.kodemaker.categorize;
+package no.kodemaker.categorize.junit;
 
 
+import no.kodemaker.categorize.Category;
+import no.kodemaker.categorize.junit.AbstractCategorizeTests;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class TestFast extends AbstractCategorizeTests {
+public class TestSlow extends AbstractCategorizeTests {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        System.setProperty("category","fast");
-    }
-
-    @Test
-    @Category(name = "fast")
-    public void testSlow() throws Exception {
-        String category = System.getProperty("category");
-        assertThat(category,is("fast"));
+        System.setProperty("category","slow");
     }
 
     @Test
     @Category(name = "slow")
+    public void testSlow() throws Exception {
+        String category = System.getProperty("category");
+        assertThat(category,is("slow"));
+    }
+
+    @Test
+    @Category(name = "fast")
     public void testFastNotRun() throws Exception {
-        fail("Slow was run but expected only fast");
+        fail("Fast was run but expected only slow");
     }
 }

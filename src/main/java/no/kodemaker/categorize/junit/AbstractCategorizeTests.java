@@ -1,4 +1,4 @@
-package no.kodemaker.categorize;
+package no.kodemaker.categorize.junit;
 
 import org.junit.Rule;
 

@@ -1,4 +1,4 @@
-package no.kodemaker.categorize
+package no.kodemaker.categorize.junit
 
 import spock.lang.Specification
 import org.junit.internal.runners.statements.FailOnTimeout
@@ -7,6 +7,8 @@ import java.lang.reflect.Method
 import org.junit.runners.model.Statement
 import org.junit.internal.runners.statements.InvokeMethod
 import org.junit.internal.AssumptionViolatedException
+import no.kodemaker.categorize.junit.Categorizable
+import no.kodemaker.categorize.Category
 
 
 class SlowCategoryAwareSpec extends Specification{
