@@ -6,5 +6,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Category {
     String name();
-    int timeout() default -1;
+    int timeout() default 0;
 }

@@ -6,6 +6,7 @@ import org.junit.runners.model.FrameworkMethod
 import java.lang.reflect.Method
 import org.junit.runners.model.Statement
 import org.junit.internal.runners.statements.InvokeMethod
+import org.junit.internal.AssumptionViolatedException
 
 
 class SlowCategoryAwareSpec extends Specification{
@@ -47,7 +48,7 @@ class SlowCategoryAwareSpec extends Specification{
         when :
             def statement = categorizable.apply(null,method,null)
         then :
-            statement == null
+            thrown(AssumptionViolatedException)
     }
 
     @Category(name = "fast")
