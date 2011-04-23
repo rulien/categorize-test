@@ -1,9 +1,16 @@
 apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
+    mavenRepo urls: "http://m2repo.spockframework.org/snapshots"
 }
 
 dependencies {
-    compile group: 'junit', name: 'junit', version: '4.8.+'
+    compile "junit:junit:4.8.2"
+    compile "commons-lang:commons-lang:2.6"
+    groovy "org.codehaus.groovy:groovy-all:1.7.4"
+    testCompile "org.mockito:mockito-all:1.8.5"
+    testCompile "org.spockframework:spock-core:0.4-groovy-1.7"
 }
