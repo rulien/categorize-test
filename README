@@ -10,7 +10,7 @@ The easy way to categorize using my Rule is to either make your own subclass and
 
 @Rule public Categorizable categorizable = new Categorizable();
 
-Or you can extend no.kodemaker.categorize.junit.AbstractCategorizeTests
+Or you can extend no.kodemaker.categorize.junit.AbstractCategorizeTest
 
 
 TODO fill inn for spock

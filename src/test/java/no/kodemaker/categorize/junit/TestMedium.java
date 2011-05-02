@@ -2,7 +2,6 @@ package no.kodemaker.categorize.junit;
 
 
 import no.kodemaker.categorize.Category;
-import no.kodemaker.categorize.junit.AbstractCategorizeTests;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,7 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class TestMedium extends AbstractCategorizeTests {
+public class TestMedium extends AbstractCategorizeTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
