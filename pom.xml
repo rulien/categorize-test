@@ -128,6 +128,6 @@
     </issueManagement>
     <scm>
         <connection>scm:git:git@github.com:rulien/categorize-test.git</connection>
-        <url>scm:git:https://github.com/rulien/categorize-test</url>
+        <url>scm:git:git@github.com:rulien/categorize-test.git</url>
     </scm>
 </project>
