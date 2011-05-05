@@ -9,6 +9,7 @@ import org.junit.internal.runners.statements.InvokeMethod
 import org.junit.internal.AssumptionViolatedException
 import no.kodemaker.categorize.junit.Categorizable
 import no.kodemaker.categorize.Category
+import spock.lang.Ignore
 
 
 class SlowCategoryAwareSpec extends Specification{
@@ -27,6 +28,7 @@ class SlowCategoryAwareSpec extends Specification{
 
     }
 
+    @Ignore
     @Category(name = "slow")
     def "should check that test category againts specified method category and return FailOnTimeout if same"(){
         given :
@@ -40,7 +42,7 @@ class SlowCategoryAwareSpec extends Specification{
             statement instanceof FailOnTimeout
     }
 
-
+    @Ignore
     @Category(name = "fast")
     def "should check that test category againts specified method category and return null if not the same"(){
         given :
@@ -48,11 +50,12 @@ class SlowCategoryAwareSpec extends Specification{
             Method methodCall = this.getClass().getMethod("should check that test category againts specified method category and return null if not the same")
             FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
-            def statement = categorizable.apply(null,method,null)
+            categorizable.apply(null,method,null)
         then :
             thrown(AssumptionViolatedException)
     }
 
+    @Ignore
     @Category(name = "fast")
     def "should check that test category againts specified method category and return FailOnTimeOut if same"(){
         given :
@@ -78,6 +81,7 @@ class SlowCategoryAwareSpec extends Specification{
             statement == returnStatement
     }
 
+    @Ignore
     @Category(name = "fast", timeout = 20)
     def "should use same timout on return statement as on category annotation"(){
         given :
