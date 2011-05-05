@@ -127,7 +127,7 @@
         <url>https://github.com/rulien/categorize-test/issues</url>
     </issueManagement>
     <scm>
-        <connection>git@github.com:rulien/categorize-test.git</connection>
-        <url>https://github.com/rulien/categorize-test</url>
+        <connection>scm:git:git@github.com:rulien/categorize-test.git</connection>
+        <url>scm:git:https://github.com/rulien/categorize-test</url>
     </scm>
 </project>
