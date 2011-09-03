@@ -21,8 +21,9 @@ public class Categorizable implements MethodRule{
 
     private Statement shouldTestCategoryRun(Statement statement, FrameworkMethod frameworkMethod, String runCategory) {
         TestCategory cat = frameworkMethod.getAnnotation(TestCategory.class);
-        if(cat == null) return statement;
-        if(StringUtils.equals(cat.name(), runCategory)){
+        if(cat == null){
+            return statement;
+        }else if(StringUtils.equals(cat.name(), runCategory)){
             return new FailOnTimeout(statement,cat.timeout());
         }else{
             throw new AssumptionViolatedException("Only test category " + runCategory + "   will run now");
