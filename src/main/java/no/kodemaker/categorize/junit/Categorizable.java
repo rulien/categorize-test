@@ -1,8 +1,7 @@
 package no.kodemaker.categorize.junit;
 
 
-import junit.framework.TestResult;
-import no.kodemaker.categorize.Category;
+import no.kodemaker.categorize.TestCategory;
 import org.apache.commons.lang.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.statements.FailOnTimeout;
@@ -15,14 +14,18 @@ public class Categorizable implements MethodRule{
 
     public Statement apply(Statement statement, FrameworkMethod frameworkMethod, Object o) {
         validateInput(frameworkMethod);
-        String runCategory = System.getProperty("category");
+        String runCategory = System.getProperty("testcategory");
         if(StringUtils.isBlank(runCategory)) return statement;
-        Category cat = frameworkMethod.getAnnotation(Category.class);
+        return shouldTestCategoryRun(statement, frameworkMethod, runCategory);
+    }
+
+    private Statement shouldTestCategoryRun(Statement statement, FrameworkMethod frameworkMethod, String runCategory) {
+        TestCategory cat = frameworkMethod.getAnnotation(TestCategory.class);
         if(cat == null) return statement;
-        if(StringUtils.isNotBlank(runCategory) && StringUtils.equals(cat.name(),runCategory)){
+        if(StringUtils.equals(cat.name(), runCategory)){
             return new FailOnTimeout(statement,cat.timeout());
         }else{
-            throw new AssumptionViolatedException("Only category " + runCategory);
+            throw new AssumptionViolatedException("Only test category " + runCategory + "   will run now");
         }
     }
 

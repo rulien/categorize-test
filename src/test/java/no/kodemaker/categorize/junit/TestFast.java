@@ -1,7 +1,7 @@
 package no.kodemaker.categorize.junit;
 
 
-import no.kodemaker.categorize.Category;
+import no.kodemaker.categorize.TestCategory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,19 +13,19 @@ public class TestFast extends AbstractCategorizeTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        System.setProperty("category","fast");
+        System.setProperty("testcategory","fast");
     }
 
     @Test
-    @Category(name = "fast")
-    public void testSlow() throws Exception {
-        String category = System.getProperty("category");
+    @TestCategory(name = "fast")
+    public void testFast() throws Exception {
+        String category = System.getProperty("testcategory");
         assertThat(category,is("fast"));
     }
 
     @Test
-    @Category(name = "slow")
-    public void testFastNotRun() throws Exception {
+    @TestCategory(name = "slow")
+    public void testSlowNotRun() throws Exception {
         fail("Slow was run but expected only fast");
     }
 }

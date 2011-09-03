@@ -1,8 +1,7 @@
 package no.kodemaker.categorize.junit
 
-import spock.lang.Specification
-import no.kodemaker.categorize.Category
-import org.junit.Rule
+import no.kodemaker.categorize.TestCategory
+
 import no.kodemaker.categorize.spock.CategorizableSpecification
 import spock.lang.Ignore
 
@@ -11,18 +10,18 @@ import spock.lang.Ignore
 class CategoryAwareSpockSpec extends CategorizableSpecification {
 
     def setupSpec(){
-        System.setProperty("category","fast")
+        System.setProperty("testcategory","fast")
     }
 
-    @Category(name="fast")
+    @TestCategory(name="fast")
     def "should run test since category is set to fast"(){
         expect :
-            System.getProperty("category") == "fast"
+            System.getProperty("testcategory") == "fast"
     }
 
-    @Category(name="slow")
+    @TestCategory(name="slow")
     def "should not run test since category is set to fast"(){
         expect :
-            System.getProperty("category") == "slow"
+            System.getProperty("testcategory") == "slow"
     }
 }
