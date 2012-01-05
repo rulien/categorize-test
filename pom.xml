@@ -49,9 +49,6 @@
             <scope>compile</scope>
             <version>2.6</version>
         </dependency>
-
-
-
     </dependencies>
 
     <build>
@@ -61,7 +58,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <inherited>true</inherited>
                 <configuration>
-                    <!-- these properties must be defined by each specific project -->
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
