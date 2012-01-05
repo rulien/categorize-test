@@ -10,11 +10,12 @@ import org.junit.internal.AssumptionViolatedException
 
 import spock.lang.Ignore
 import no.kodemaker.categorize.TestCategory
+import org.junit.Rule
 
 
 class SlowCategoryAwareSpec extends Specification{
 
-    Categorizable categorizable = new Categorizable()
+    @Rule Categorizable categorizable = new Categorizable()
 
 
     def "should throw illegalstate if frameworkmethod is null"(){
@@ -28,12 +29,10 @@ class SlowCategoryAwareSpec extends Specification{
 
     }
 
-    @Ignore
-    @TestCategory(name = "slow")
     def "should check that test category againts specified method category and return FailOnTimeout if same"(){
         given :
             System.setProperty("testcategory","slow")
-            Method methodCall = this.getClass().getMethod("should check that test category againts specified method category and return FailOnTimeout if same")
+            Method methodCall = Slow.getMethod("slow")
             FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
             def statement = categorizable.apply(null,method,null)
@@ -42,12 +41,10 @@ class SlowCategoryAwareSpec extends Specification{
             statement instanceof FailOnTimeout
     }
 
-    @Ignore
-    @TestCategory(name = "fast")
     def "should check that test category againts specified method category and return null if not the same"(){
         given :
             System.setProperty("testcategory","slow")
-            Method methodCall = this.getClass().getMethod("should check that test category againts specified method category and return null if not the same")
+            Method methodCall = Fast.getMethod("fast")
             FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
             categorizable.apply(null,method,null)
@@ -55,12 +52,10 @@ class SlowCategoryAwareSpec extends Specification{
             thrown(AssumptionViolatedException)
     }
 
-    @Ignore
-    @TestCategory(name = "fast")
     def "should check that test category againts specified method category and return FailOnTimeOut if same"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = this.getClass().getMethod("should check that test category againts specified method category and return FailOnTimeOut if same")
+            Method methodCall = Fast.getMethod("fast")
             FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
             def statement = categorizable.apply(null,method,null)
@@ -72,7 +67,7 @@ class SlowCategoryAwareSpec extends Specification{
     def "should return same as input if no category specified"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = this.getClass().getMethod("should return same as input if no category specified")
+            Method methodCall = Fast.getMethod("nospecified")
             FrameworkMethod method = new FrameworkMethod(methodCall)
             Statement statement = new InvokeMethod(method,this)
         when :
@@ -81,12 +76,10 @@ class SlowCategoryAwareSpec extends Specification{
             statement == returnStatement
     }
 
-    @Ignore
-    @TestCategory(name = "fast", timeout = 20)
     def "should use same timout on return statement as on category annotation"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = this.getClass().getMethod("should use same timout on return statement as on category annotation")
+            Method methodCall = Fast.getMethod("withtimeout")
             FrameworkMethod method = new FrameworkMethod(methodCall)
             Statement statement = new InvokeMethod(method,this)
         when :
@@ -95,10 +88,27 @@ class SlowCategoryAwareSpec extends Specification{
             returnStatement != null
             returnStatement instanceof FailOnTimeout
             20 == getTimeout(returnStatement)
-
     }
 
     int getTimeout(FailOnTimeout failOnTimeout) {
         return failOnTimeout.metaPropertyValues.get(0).bean.fTimeout
+    }
+    
+    class Slow {
+        @TestCategory(name = "slow")
+        public void slow(){}
+    }
+
+    class Medium {
+        @TestCategory(name = "medium")
+        public void medium(){}
+    }
+
+    class Fast {
+        @TestCategory(name = "fast")
+        public void fast(){}
+        public void nospecified(){}
+        @TestCategory(name = "fast", timeout=20)
+        public void withtimeout(){}
     }
 }
