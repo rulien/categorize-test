@@ -23,7 +23,7 @@ public class Categorizable implements MethodRule{
         TestCategory cat = frameworkMethod.getAnnotation(TestCategory.class);
         if(cat == null){
             return statement;
-        }else if(StringUtils.equals(cat.name(), runCategory)){
+        }else if(StringUtils.equals(cat.name(), runCategory) || StringUtils.equals("all", runCategory)){
             return new FailOnTimeout(statement,cat.timeout());
         }else{
             throw new AssumptionViolatedException("Only test category " + runCategory + "   will run now");
