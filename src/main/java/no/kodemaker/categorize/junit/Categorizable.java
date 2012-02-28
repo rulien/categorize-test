@@ -5,22 +5,23 @@ import no.kodemaker.categorize.TestCategory;
 import org.apache.commons.lang.StringUtils;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.statements.FailOnTimeout;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-public class Categorizable implements MethodRule{
+public class Categorizable implements TestRule{
 
 
-    public Statement apply(Statement statement, FrameworkMethod frameworkMethod, Object o) {
-        validateInput(frameworkMethod);
+    @Override
+    public Statement apply(Statement statement, Description description) {
+        validateInput(description);
         String runCategory = System.getProperty("testcategory");
         if(StringUtils.isBlank(runCategory)) return statement;
-        return shouldTestCategoryRun(statement, frameworkMethod, runCategory);
+        return shouldTestCategoryRun(statement, description, runCategory);
     }
 
-    private Statement shouldTestCategoryRun(Statement statement, FrameworkMethod frameworkMethod, String runCategory) {
-        TestCategory cat = frameworkMethod.getAnnotation(TestCategory.class);
+    private Statement shouldTestCategoryRun(Statement statement, Description description, String runCategory) {
+        TestCategory cat = description.getAnnotation(TestCategory.class);
         if(cat == null){
             return statement;
         }else if(StringUtils.equals(cat.name(), runCategory) || StringUtils.equals("all", runCategory)){
@@ -30,7 +31,8 @@ public class Categorizable implements MethodRule{
         }
     }
 
-    private void validateInput(FrameworkMethod frameworkMethod) {
-        if(frameworkMethod == null) throw new IllegalStateException("Input to a Rule cannot be null, something wrong in Junit ??");
+    private void validateInput(Description description) {
+        if(description == null) throw new IllegalStateException("Input to a Rule cannot be null, something wrong in Junit ??");
     }
+
 }
