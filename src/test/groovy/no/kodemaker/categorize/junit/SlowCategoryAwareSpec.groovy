@@ -1,17 +1,12 @@
 package no.kodemaker.categorize.junit
 
-import spock.lang.Specification
-import org.junit.internal.runners.statements.FailOnTimeout
-import org.junit.runners.model.FrameworkMethod
-import java.lang.reflect.Method
-import org.junit.runners.model.Statement
-import org.junit.internal.runners.statements.InvokeMethod
-import org.junit.internal.AssumptionViolatedException
-
-import spock.lang.Ignore
 import no.kodemaker.categorize.TestCategory
 import org.junit.Rule
-
+import org.junit.internal.AssumptionViolatedException
+import org.junit.internal.runners.statements.FailOnTimeout
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
+import spock.lang.Specification
 
 class SlowCategoryAwareSpec extends Specification{
 
@@ -19,23 +14,21 @@ class SlowCategoryAwareSpec extends Specification{
 
 
     def "should throw illegalstate if frameworkmethod is null"(){
-        given :
-            System.setProperty("testcategory","slow")
         when :
-            categorizable.apply(null,null,null)
+             categorizable.apply(null,null)
         then :
             thrown(IllegalStateException)
-
-
     }
 
     def "should check that test category againts specified method category and return FailOnTimeout if same"(){
         given :
             System.setProperty("testcategory","slow")
-            Method methodCall = Slow.getMethod("slow")
-            FrameworkMethod method = new FrameworkMethod(methodCall)
+            Description description = new Description("slow", Slowest.annotations)
         when :
-            def statement = categorizable.apply(null,method,null)
+            def statement = categorizable.apply(new Statement(){
+                @Override
+                void evaluate() {}
+            },description)
         then :
             statement != null
             statement instanceof FailOnTimeout
@@ -44,10 +37,8 @@ class SlowCategoryAwareSpec extends Specification{
     def "should check that test category againts specified method category and return null if not the same"(){
         given :
             System.setProperty("testcategory","slow")
-            Method methodCall = Fast.getMethod("fast")
-            FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
-            categorizable.apply(null,method,null)
+            categorizable.apply(null,new Description("slow", Fastest.annotations))
         then :
             thrown(AssumptionViolatedException)
     }
@@ -55,10 +46,8 @@ class SlowCategoryAwareSpec extends Specification{
     def "should check that test category againts specified method category and return FailOnTimeOut if same"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = Fast.getMethod("fast")
-            FrameworkMethod method = new FrameworkMethod(methodCall)
         when :
-            def statement = categorizable.apply(null,method,null)
+            def statement = categorizable.apply(null,new Description("fast", Fastest.annotations))
         then :
             statement != null
             statement instanceof FailOnTimeout
@@ -67,48 +56,31 @@ class SlowCategoryAwareSpec extends Specification{
     def "should return same as input if no category specified"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = Fast.getMethod("nospecified")
-            FrameworkMethod method = new FrameworkMethod(methodCall)
-            Statement statement = new InvokeMethod(method,this)
+            Statement statement = new FailOnTimeout(null,30)
         when :
-            def returnStatement = categorizable.apply(statement,method,null)
+            def returnStatement = categorizable.apply(statement,new Description("fast"))
         then :
             statement == returnStatement
     }
 
-    def "should use same timout on return statement as on category annotation"(){
+    def "should use same timeout on return statement as on category annotation"(){
         given :
             System.setProperty("testcategory","fast")
-            Method methodCall = Fast.getMethod("withtimeout")
-            FrameworkMethod method = new FrameworkMethod(methodCall)
-            Statement statement = new InvokeMethod(method,this)
         when :
-            def returnStatement = categorizable.apply(statement,method,null)
+            def returnStatement = categorizable.apply(null,new Description("fast", Fastest.annotations))
         then :
             returnStatement != null
             returnStatement instanceof FailOnTimeout
-            20 == getTimeout(returnStatement)
+            30 == getTimeout(returnStatement)
     }
 
     int getTimeout(FailOnTimeout failOnTimeout) {
         return failOnTimeout.metaPropertyValues.get(0).bean.fTimeout
     }
-    
-    class Slow {
-        @TestCategory(name = "slow")
-        public void slow(){}
-    }
 
-    class Medium {
-        @TestCategory(name = "medium")
-        public void medium(){}
-    }
+    @TestCategory(name = "slow")
+    class Slowest {}
 
-    class Fast {
-        @TestCategory(name = "fast")
-        public void fast(){}
-        public void nospecified(){}
-        @TestCategory(name = "fast", timeout=20)
-        public void withtimeout(){}
-    }
+    @TestCategory(name = "fast", timeout = 30)
+    class Fastest {}
 }
