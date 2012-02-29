@@ -3,12 +3,14 @@ package no.kodemaker.categorize.junit;
 
 import no.kodemaker.categorize.TestCategory;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+@Ignore
 public class TestFast extends AbstractCategorizeTest {
 
     @BeforeClass
