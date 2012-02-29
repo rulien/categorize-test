@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>no.finntech</groupId>
+        <artifactId>savin-maven-pom</artifactId>
+        <version>3</version>
     </parent>
     <groupId>no.kodemaker</groupId>
     <artifactId>categorize-test</artifactId>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>0.6-groovy-1.8-SNAPSHOT</version>
+            <version>0.6-groovy-1.8-finn</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.groovy</groupId>
