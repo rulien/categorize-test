@@ -3,6 +3,8 @@ package no.kodemaker.categorize.junit;
 
 import no.kodemaker.categorize.TestCategory;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.statements.FailOnTimeout;
 import org.junit.rules.TestRule;
@@ -17,18 +19,26 @@ public class Categorizable implements TestRule{
         validateInput(description);
         String runCategory = System.getProperty("testcategory");
         if(StringUtils.isBlank(runCategory)) return statement;
-        return shouldTestCategoryRun(statement, description, runCategory);
+        return shouldTestCategoryRun(statement, description, runCategory.split(","));
     }
 
-    private Statement shouldTestCategoryRun(Statement statement, Description description, String runCategory) {
+    private Statement shouldTestCategoryRun(Statement statement, Description description, String... runCategories) {
         TestCategory cat = description.getAnnotation(TestCategory.class);
         if(cat == null){
             return statement;
-        }else if(StringUtils.equals(cat.name(), runCategory) || StringUtils.equals("all", runCategory)){
-            return new FailOnTimeout(statement,cat.timeout());
-        }else{
-            throw new AssumptionViolatedException("Only test category " + runCategory + "   will run now");
+        }else {
+            return checkIfMatchForAnyCategory(statement, cat, runCategories);
         }
+    }
+
+    private Statement checkIfMatchForAnyCategory(Statement statement, TestCategory cat, String[] runCategories) {
+        for (String runCategory : runCategories ) {
+            if(StringUtils.equals(cat.name(), runCategory) || StringUtils.equals("all", runCategory)){
+                return new FailOnTimeout(statement,cat.timeout());
+            }
+        }
+
+        throw new AssumptionViolatedException("Only one of these categories " + ToStringBuilder.reflectionToString(runCategories, ToStringStyle.SIMPLE_STYLE) + "   will run now");
     }
 
     private void validateInput(Description description) {

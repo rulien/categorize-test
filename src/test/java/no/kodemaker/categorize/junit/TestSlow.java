@@ -2,7 +2,6 @@ package no.kodemaker.categorize.junit;
 
 
 import no.kodemaker.categorize.TestCategory;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,18 +13,17 @@ import static org.junit.Assert.fail;
 @Ignore
 public class TestSlow {
 
-    @Rule public Categorizable categorizable = new Categorizable();
+    @Rule
+    public Categorizable categorizable = new Categorizable();
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        System.setProperty("testcategory","slow");
-    }
+    @Rule
+    public AddTestCategorySystemPropertyRule addTestCategorySystemPropertyRule = new AddTestCategorySystemPropertyRule("slow");
 
     @Test
     @TestCategory(name = "slow")
     public void testSlow() throws Exception {
         String category = System.getProperty("testcategory");
-        assertThat(category,is("slow"));
+        assertThat(category, is("slow"));
     }
 
     @Test

@@ -8,12 +8,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @TestCategory(name = "fast")
-@Ignore("Has to have systemproperty")
+@Ignore
 public class TestFastClass extends AbstractClassCategorizeTest {
 
     @Test
     public void testFast() throws Exception {
         String category = System.getProperty("testcategory");
-        assertThat(category,is("fast"));
+        assertThat(category, is("fast"));
     }
 }
